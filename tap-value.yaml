@@ -15,7 +15,7 @@ supply_chain: basic
 
 ootb_supply_chain_basic:
   registry:
-    server: "ghcr.io"
+    server: "tanzulab.azurecr.io"
     repository: "tanzulab/tap/supply-chain"
   gitops:
     ssh_secret: ""
