@@ -1,0 +1,85 @@
+shared:
+  ingress_domain: "tanzulab.vmware.com"
+  ingress_issuer: "tap-ingress-selfsigned"
+  image_registry:
+    project_path: "tanzulab.azurecr.io/tanzulab/tap"
+    username: "xinstevenl"
+    password: 'IXvDMTM7A80OUUF3RrA7pwk/t7FBnYP2sF7TxAud+1+ACRDipY7i'
+  activateAppLiveViewSecureAccessControl: true
+
+ceip_policy_disclosed: TRUE
+
+profile: full
+
+supply_chain: basic
+
+ootb_supply_chain_basic:
+  registry:
+    server: "ghcr.io"
+    repository: "tanzulab/tap/supply-chain"
+  gitops:
+    ssh_secret: ""
+
+contour:
+  envoy:
+    service:
+      type: LoadBalancer
+
+buildservice:
+  kp_default_repository: "tanzulab.azurecr.io/tanzulab/tap/build-service"
+  kp_default_repository_username: "xinstevenl"
+  kp_default_repository_password: 'IXvDMTM7A80OUUF3RrA7pwk/t7FBnYP2sF7TxAud+1+ACRDipY7i'
+  exclude_dependencies: true
+
+tap_gui:
+  tls:
+    namespace: tap-gui
+    secretName: tap-gui-cert
+  metadataStoreAutoconfiguration: true
+  app_config:
+    supplyChain:
+      enablePlugin: true
+    catalog:
+      locations:
+      - type: url
+        target: https://raw.githubusercontent.com/bullblock/tap-catalog/main/catalog-info.yaml
+    auth:
+      allowGuestAccess: true
+      environment: development
+      providers:
+        github:
+          development:
+            clientId: "246bf2b23ef0565069d5"
+            clientSecret: "e79628abc026810600aad62c0ca786abd100f903"
+    app:
+      baseUrl: "https://tap-gui.tanzulab.vmware.com"
+    backend:
+      baseUrl: "https://tap-gui.tanzulab.vmware.com"
+      cors:
+        origin: "https://tap-gui.tanzulab.vmware.com"
+      database:
+        client: pg
+        connection:
+          host: postgresql.pgdb.svc.cluster.local
+          port: 5432
+          user: pgadmin
+          password: 'P@ssw0rdZaq1!@2wsx'
+          ssl: false
+
+metadata_store:
+  ingressEnabled: true
+  ingressDomain: "tanzulab.vmware.com"
+  ns_for_export_app_cert: "default"
+  app_service_type: ClusterIP
+
+scanning:
+  metadataStore:
+    url: ""
+
+grype:
+  namespace: "default"
+  targetImagePullSecret: "registry-credentials"
+
+policy:
+  tuf_enabled: false
+
